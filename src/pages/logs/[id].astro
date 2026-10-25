@@ -1,0 +1,13 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { logs, records } from '../../lib/archive';
+import { path } from '../../lib/paths';
+import { marked } from 'marked';
+export function getStaticPaths() { return logs.map(log => ({params:{id:log.id},props:{log}})); }
+const { log } = Astro.props;
+const body = marked.parse(log.body, { async: false });
+const related = records.filter(record => log.relatedRecordIds.includes(record.id));
+---
+<Layout title={`${log.title} | COD:OL 开发日志`} active="logs">
+  <article class="reading-page"><a class="back-link" href={path('logs/')}>← 返回日志归档</a><header><p class="version-line"><time class="mono" datetime={log.date}>{log.date}</time><span>COD:OL <span class="mono">{log.gameVersion}</span></span></p><h1>{log.title}</h1><p class="lead">{log.summary}</p></header><div class="prose" set:html={body} /><section class="detail-section"><h2>关联功能</h2>{related.length ? <ul>{related.map(record => <li><a href={path(`records/${record.id}/`)}>{record.title}</a></li>)}</ul> : <p>暂无关联的公开功能记录。</p>}</section></article>
+</Layout>

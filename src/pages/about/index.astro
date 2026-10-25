@@ -1,0 +1,19 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+<Layout title="关于项目 | COD:OL 修复档案" active="about">
+  <header class="page-heading"><p class="version-line">COD:OL <span class="mono">3.19.26.22</span></p><h1>关于这份档案</h1><p>让恢复过程中的结论、依据和边界可以被查阅。</p></header>
+  <div class="about-grid">
+    <nav class="contents-nav" aria-label="本页目录"><a href="#purpose">档案用途</a><a href="#status-definitions">状态定义</a><a href="#publication">公开范围</a><a href="#updates">更新方式</a></nav>
+    <div class="about-content">
+      <section id="purpose"><h2>记录可确认的部分</h2><p>这是一份围绕 COD:OL <span class="mono">3.19.26.22</span> 的功能恢复档案。功能条目汇集验证结论、证据与限制；开发日志解释变化的上下文。</p><p>暂无公开记录不等于工作未开展、功能不可用或恢复未完成。本站不据此计算进度百分比。</p></section>
+      <section id="status-definitions"><h2>三种状态，分别阅读</h2><p>“能够运行”“工程已完成”和“可以公开获取”表达的是不同事实。</p>
+        <h3>可用性</h3><dl class="definition-list"><div><dt class="verified">已验证可用</dt><dd>已有公开证据与验证日期，在记录所述条件和范围内可用。</dd></div><div><dt class="partial">部分可用</dt><dd>仅部分流程或条件可用，需同时阅读限制。</dd></div><div><dt>待验证</dt><dd>尚缺足够的验证依据，不能据此判断可用或不可用。</dd></div><div><dt class="unavailable">暂不可用</dt><dd>在已记录的条件下暂时不能使用，具体范围见限制。</dd></div></dl>
+        <h3>工程状态</h3><dl class="definition-list"><div><dt>未披露</dt><dd>没有获准公开的工程状态。</dd></div><div><dt>调查中</dt><dd>正在定位问题或评估方案。</dd></div><div><dt>处理中</dt><dd>相关工程工作正在进行。</dd></div><div><dt class="blocked">受阻</dt><dd>存在当前无法推进的条件，原因随记录说明。</dd></div><div><dt>已完成</dt><dd>本条目所描述的工程工作已完成，不自动代表已验证可用。</dd></div></dl>
+        <h3>公开获取</h3><dl class="definition-list"><div><dt>未披露</dt><dd>尚未说明获取安排。</dd></div><div><dt>未开放</dt><dd>当前未向公众提供获取方式。</dd></div><div><dt>有限开放</dt><dd>仅在记录明确的范围与条件下开放。</dd></div><div><dt>已公开</dt><dd>已有经确认的公开获取说明；不代表所有功能均可用。</dd></div></dl>
+      </section>
+      <section id="publication"><h2>公开范围</h2><p>只收录经确认允许公开的文字与证据。未经批准的进展、内部源代码、客户端资源与个人联系方式不在本站发布。</p><p>没有公开影像时，会明确标注“暂无公开影像”。不会用概念图、生成画面或其他游戏画面替代实际成果。</p><p>本站未发布公开下载入口。功能恢复状态不构成获取许可或发布时间承诺。</p></section>
+      <section id="updates"><h2>每次更新，留下依据</h2><p>内容经人工确认、更新并重新构建后发布。本站不与内部开发系统实时同步，也不自动从仓库或讨论中提取进度。</p><p>验证日期与记录更新日期由对应事实确定。未披露的日期保持为空，不使用网站构建时间替代。</p></section>
+    </div>
+  </div>
+</Layout>

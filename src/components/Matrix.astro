@@ -1,0 +1,44 @@
+---
+import { records, categories, availabilityLabels, workStatusLabels, accessStatusLabels } from '../lib/archive';
+import { path } from '../lib/paths';
+import RecordDetail from './RecordDetail.astro';
+const hasPublicMedia = records.some(record => record.evidence.some(item => item.type === 'image' || item.type === 'video'));
+---
+<section class="matrix-section" aria-labelledby="matrix-title" data-matrix>
+  <div class="section-heading"><h2 id="matrix-title">功能恢复矩阵</h2><p>按功能查阅验证结论、已知限制与公开证据。</p></div>
+  <form class="filters" role="search" aria-label="筛选恢复记录" hidden data-filters>
+    <label>关键词<input type="search" name="q" placeholder="搜索功能或记录内容" autocomplete="off" /></label>
+    <label>功能分类<select name="category"><option value="all">全部分类</option>{Object.entries(categories).map(([id,label]) => <option value={id}>{label}</option>)}</select></label>
+    <label>可用性<select name="availability"><option value="all">全部可用性</option>{Object.entries(availabilityLabels).map(([id,label]) => <option value={id}>{label}</option>)}</select></label>
+    <button type="reset" class="clear-button">清除筛选 <span aria-hidden="true">↺</span></button>
+  </form>
+  <noscript><p class="notice">所有公开记录与独立详情均可直接阅读。启用 JavaScript 后可使用筛选。</p></noscript>
+  <div class="matrix-topline"><p data-result-count role="status" aria-live="polite">{records.length} 条公开记录</p><a href={path('about/#status-definitions')}>如何理解状态 <span aria-hidden="true">↗</span></a></div>
+  <div class="matrix-grid">
+    <div class="status-index">
+      <div class="index-head" aria-hidden="true"><span>功能 / 分类</span><span>可用性</span></div>
+      {records.length === 0 && <div class="index-empty" data-initial-empty><span class="empty-label">公开记录</span><h3>尚待公开</h3><p>目前尚无获准公开的恢复记录。</p><p class="muted">暂无记录，不代表工作未开展或未完成。</p><a class="text-link" href={path('about/#publication')}>了解收录方式 <span aria-hidden="true">↗</span></a></div>}
+      <div data-record-list>{Object.entries(categories).map(([category,label]) => {
+        const items = records.filter(record => record.category === category);
+        return items.length > 0 && <section class="record-group" data-category-group><h3>{label}</h3><ul>{items.map(record => <li data-record-row data-id={record.id} data-category={record.category} data-availability={record.availability} data-search={`${record.title} ${record.summary} ${record.limitations.join(' ')} ${label} ${workStatusLabels[record.workStatus]} ${accessStatusLabels[record.accessStatus]}`}>
+          <a class="record-row" href={path(`records/${record.id}/`)} data-record-link={record.id}><span><strong>{record.title}</strong><small>{record.summary}</small></span><span class:list={['status-text',record.availability]}>{availabilityLabels[record.availability]}</span></a>
+        </li>)}</ul></section>;
+      })}</div>
+      <div class="index-empty" data-no-results hidden><span class="empty-label">筛选结果</span><h3>没有匹配的记录</h3><p>试试其他关键词，或清除筛选条件。</p><button type="button" class="text-link" data-clear>清除全部筛选 <span aria-hidden="true">↺</span></button></div>
+      <p class="index-note">可用性、工程状态与公开获取分别记录。</p>
+    </div>
+    <aside class="evidence-panel" aria-label="关联详情与证据">
+      <div data-default-detail>
+        <div class="panel-heading"><h3>关联详情与证据</h3><span>公开档案</span></div>
+        <div class="media-empty archive-media"><div class="empty-frame" aria-hidden="true"></div><p>{hasPublicMedia ? '影像随记录归档' : '暂无公开影像'}</p><span>{hasPublicMedia ? '选择对应功能，查阅已公开的截图与影像。' : '经确认的截图与影像将在对应条目中收录。'}</span></div>
+        <div class="detail-intro"><h3>{records.length ? '从左侧选择一条记录' : '每一项结论，都有出处。'}</h3><p>{records.length ? '在这里阅读验证范围、已知限制与关联日志。' : '公开记录将逐项注明验证范围、已知限制与证据。没有验证信息时，不推断可用性。'}</p></div>
+        <dl class="empty-facts"><div><dt>验证结论</dt><dd>随条目公开</dd></div><div><dt>已知限制</dt><dd>与结论一起说明</dd></div><div><dt>关联日志</dt><dd>保留可追溯链接</dd></div></dl>
+      </div>
+      <div data-selected-detail aria-live="polite"></div>
+    </aside>
+  </div>
+  {records.map(record => <template data-detail-template={record.id}><RecordDetail record={record} compact /></template>)}
+</section>
+<script>
+  import '../scripts/matrix';
+</script>

@@ -1,0 +1,41 @@
+---
+import '../styles/global.css';
+import { path } from '../lib/paths';
+interface Props { title?: string; description?: string; active?: string; }
+const { title = 'COD:OL 修复档案', description = 'COD:OL 3.19.26.22 的功能恢复、验证证据与开发记录。公开记录不代表全部工程进度。', active = 'overview' } = Astro.props;
+const navigation = [{id:'overview',label:'概览',url:path()}, {id:'status',label:'恢复状态',url:path('status/')}, {id:'logs',label:'开发日志',url:path('logs/')}, {id:'about',label:'关于项目',url:path('about/')}];
+---
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#E7E5DF" />
+    <link rel="icon" type="image/svg+xml" href={path('favicon.svg')} />
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">跳到主要内容</a>
+    <header class="site-header shell">
+      <a class="brand" href={path()} aria-label="COD:OL 修复档案首页"><strong>COD:OL</strong><span>修复档案</span></a>
+      <nav class="desktop-nav" aria-label="主要导航">
+        {navigation.map(item => <a href={item.url} aria-current={active === item.id ? 'page' : undefined}>{item.label}</a>)}
+      </nav>
+      <details class="mobile-nav">
+        <summary>导航 <span aria-hidden="true">＋</span></summary>
+        <nav aria-label="移动导航">{navigation.map(item => <a href={item.url} aria-current={active === item.id ? 'page' : undefined}>{item.label}</a>)}</nav>
+      </details>
+    </header>
+    <main id="main" class="shell"><slot /></main>
+    <footer class="site-footer shell">
+      <div><strong>COD:OL</strong><span>恢复过程的公开档案</span></div>
+      <p>以记录与证据为准。内容经确认后更新。</p>
+      <a href={path('about/#publication')}>公开范围与更新方式 <span aria-hidden="true">↗</span></a>
+    </footer>
+  </body>
+</html>

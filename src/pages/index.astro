@@ -1,0 +1,17 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Matrix from '../components/Matrix.astro';
+import { path } from '../lib/paths';
+import { logs } from '../lib/archive';
+---
+<Layout>
+  <section class="hero" aria-labelledby="page-title">
+    <div class="hero-title"><p class="eyebrow">功能恢复 / 验证记录</p><h1 id="page-title">COD:OL<br /><span>修复档案</span></h1><p class="hero-copy">留存恢复过程。查阅功能状态、验证证据与已知限制。</p></div>
+    <div class="version-sheet"><span class="sheet-label">当前记录版本</span><p class="version mono">3.19.26.22</p><div class="sheet-rule"></div><p>公开资料持续归档</p><span class="muted">记录反映已公开的验证范围，<br />不推算整体完成度。</span></div>
+  </section>
+  <Matrix />
+  <section class="journal-section" aria-labelledby="journal-title">
+    <div><h2 id="journal-title">开发日志</h2><p>保留变化的上下文。</p><a class="text-link" href={path('logs/')}>查看日志归档 <span aria-hidden="true">↗</span></a></div>
+    <div class="journal-preview">{logs.length ? logs.slice(0,3).map(log => <a class="journal-row" href={path(`logs/${log.id}/`)}><time class="mono" datetime={log.date}>{log.date}</time><h3>{log.title}</h3><p>{log.summary}</p></a>) : <><h3>暂无公开日志</h3><p>经确认的开发记录将保留独立地址，并与相关功能条目关联。</p><span class="muted">这里只呈现获准公开的内容。</span></>}</div>
+  </section>
+</Layout>

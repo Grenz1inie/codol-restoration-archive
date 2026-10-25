@@ -1,0 +1,29 @@
+---
+import { availabilityLabels, workStatusLabels, accessStatusLabels, categories, logs, type ArchiveRecord } from '../lib/archive';
+import { path } from '../lib/paths';
+interface Props { record: ArchiveRecord; compact?: boolean; }
+const { record, compact = false } = Astro.props;
+const related = logs.filter(log => record.relatedLogIds.includes(log.id));
+---
+<article class="record-detail">
+  <p class="detail-category">{categories[record.category]} <span class="mono">{record.gameVersion}</span></p>
+  <h2>{record.title}</h2>
+  <p class="detail-summary">{record.summary}</p>
+  <dl class="status-triad">
+    <div><dt>可用性</dt><dd class:list={['status-text', record.availability]}>{availabilityLabels[record.availability]}</dd></div>
+    <div><dt>工程状态</dt><dd class:list={{blocked:record.workStatus === 'blocked'}}>{workStatusLabels[record.workStatus]}</dd></div>
+    <div><dt>公开获取</dt><dd>{accessStatusLabels[record.accessStatus]}</dd></div>
+  </dl>
+  <section class="detail-section"><h3>已知限制</h3>{record.limitations.length ? <ul>{record.limitations.map(item => <li>{item}</li>)}</ul> : <p>本条记录未披露其他限制，不代表不存在限制。</p>}</section>
+  <section class="detail-section"><h3>验证证据</h3>
+    {record.evidence.length ? <ul class="evidence-list">{record.evidence.map(item => <li>
+      {item.type === 'image' && <img src={item.url} alt={item.alt || item.description} loading="lazy" width="960" height="540" />}
+      <a href={item.url} target="_blank" rel="noopener noreferrer">{item.title} <span aria-hidden="true">↗</span><span class="sr-only">（新窗口）</span></a>
+      <p>{item.description}</p>
+    </li>)}</ul> : <p>本条记录尚未附上公开证据。</p>}
+    {!record.evidence.some(item => item.type === 'image' || item.type === 'video') && <div class="media-empty"><p>暂无公开影像</p><span>经确认的截图与影像将在这里收录。</span></div>}
+  </section>
+  <section class="detail-section"><h3>关联日志</h3>{related.length ? <ul>{related.map(log => <li><a href={path(`logs/${log.id}/`)}>{log.title}</a></li>)}</ul> : <p>暂无关联的公开日志。</p>}</section>
+  <dl class="record-dates"><div><dt>验证日期</dt><dd>{record.verifiedAt ? <time datetime={record.verifiedAt} class="mono">{record.verifiedAt}</time> : '未披露'}</dd></div><div><dt>记录更新</dt><dd>{record.updatedAt ? <time datetime={record.updatedAt} class="mono">{record.updatedAt}</time> : '未披露'}</dd></div></dl>
+  {compact && <a class="text-link" href={path(`records/${record.id}/`)}>打开独立详情 <span aria-hidden="true">↗</span></a>}
+</article>

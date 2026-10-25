@@ -1,0 +1,12 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { logs } from '../../lib/archive';
+import { path } from '../../lib/paths';
+---
+<Layout title="开发日志 | COD:OL 修复档案" active="logs">
+  <header class="page-heading"><p class="version-line">COD:OL <span class="mono">3.19.26.22</span></p><h1>开发日志</h1><p>记录发生了什么，以及结论适用于什么范围。</p></header>
+  <section class="log-archive" aria-label="公开开发日志">
+    <p class="archive-count">{logs.length} 篇公开日志</p>
+    {logs.length ? logs.map(log => <a class="journal-row" href={path(`logs/${log.id}/`)}><time class="mono" datetime={log.date}>{log.date}</time><h2>{log.title}</h2><p>{log.summary}</p></a>) : <div class="large-empty"><h2>还没有可公开的记录。</h2><p>经确认的日志将在这里按日期归档。暂无日志不代表没有开发活动。</p><a class="text-link" href={path('about/#publication')}>了解公开范围 <span aria-hidden="true">↗</span></a></div>}
+  </section>
+</Layout>

@@ -1,0 +1,11 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import RecordDetail from '../../components/RecordDetail.astro';
+import { records } from '../../lib/archive';
+import { path } from '../../lib/paths';
+export function getStaticPaths() { return records.map(record => ({params:{id:record.id},props:{record}})); }
+const { record } = Astro.props;
+---
+<Layout title={`${record.title} | COD:OL 修复档案`} active="status">
+  <div class="detail-page"><a class="back-link" href={path('status/')}>← 返回恢复状态</a><h1 class="sr-only">{record.title}</h1><RecordDetail record={record} /></div>
+</Layout>
